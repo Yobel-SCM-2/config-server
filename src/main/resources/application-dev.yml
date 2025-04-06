@@ -1,0 +1,15 @@
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/Uguimar-Platform/config-dev
+          clone-on-start: true
+          default-label: main
+          timeout: 10
+          search-paths: '{application}'
+logging:
+  level:
+    org.springframework.cloud: DEBUG
+    org.springframework.boot: DEBUG
+    com.uguimar: DEBUG
