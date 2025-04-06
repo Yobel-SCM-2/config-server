@@ -10,6 +10,8 @@ spring:
     user:
       name: configuser
       password: ${CONFIG_SERVER_PASSWORD:configpassword}
+  main:
+    web-application-type: reactive
 
 management:
   endpoints:
