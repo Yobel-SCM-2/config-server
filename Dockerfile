@@ -1,38 +1,35 @@
-# Build stage
-FROM openjdk:17.0.2-jdk-slim as build
-
-# Install Maven and required tools
-RUN apt-get update && apt-get install -y ca-certificates wget maven && \
-    rm -rf /var/cache/apt/*
-
+FROM eclipse-temurin:17-jdk-alpine AS build
 WORKDIR /workspace/app
 
-# Copy Maven configuration files first to leverage Docker cache
+# Optimize layer caching by copying only the necessary files to resolve dependencies first
+COPY mvnw .
+COPY .mvn .mvn
 COPY pom.xml .
 
-# Download dependencies in a separate layer
-RUN mvn dependency:go-offline -B
+# Download dependencies to take advantage of the cache
+RUN chmod +x ./mvnw && ./mvnw dependency:go-offline -B
 
-# Copy the source code and build the project
+# Copy the source code and build
 COPY src src
-RUN mvn package -DskipTests
-
-# Extract the JAR contents for the next stage
+RUN ./mvnw package -DskipTests
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
-# Runtime stage
-FROM openjdk:17.0.2-jdk-slim
-
+FROM eclipse-temurin:17-jre-alpine
+VOLUME /tmp
 ARG DEPENDENCY=/workspace/app/target/dependency
 
-# Copy the application layers to optimize Docker caching
+# Install curl for healthcheck
+RUN apk add --no-cache curl
+
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 
-# Application configuration
-EXPOSE 8888
-ENV SPRING_PROFILES_ACTIVE=dev
+# Create non-root user
+RUN addgroup --system --gid 1001 appgroup && \
+    adduser --system --uid 1001 --ingroup appgroup appuser && \
+    chown -R appuser:appgroup /app
+USER appuser
 
-# Start the application
-ENTRYPOINT ["java", "-cp", "app:app/lib/*", "com.uguimar.configserver.ConfigServerApplication"]
+EXPOSE 8888
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-cp","app:app/lib/*","com.uguimar.configserver.ConfigServerApplication"]
