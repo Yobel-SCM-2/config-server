@@ -3,7 +3,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/Uguimar-Platform/config-prod
+          uri: https://github.com/Yobel-SCM-2/config-prod
           clone-on-start: true
           default-label: main
           timeout: 10
@@ -11,7 +11,7 @@ spring:
 logging:
   level:
     root: WARN
-    com.uguimar: INFO
+    com.yobel: INFO
 
 management:
   endpoints:

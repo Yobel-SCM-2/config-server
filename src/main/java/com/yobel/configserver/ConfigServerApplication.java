@@ -1,4 +1,4 @@
-package com.uguimar.configserver;
+package com.yobel.configserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

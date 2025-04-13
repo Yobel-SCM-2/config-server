@@ -32,4 +32,4 @@ RUN addgroup --system --gid 1001 appgroup && \
 USER appuser
 
 EXPOSE 8888
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-cp","app:app/lib/*","com.uguimar.configserver.ConfigServerApplication"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-cp","app:app/lib/*","com.yobel.configserver.ConfigServerApplication"]
