@@ -1,4 +1,4 @@
-package com.uguimar.configserver;
+package com.yobel.configserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

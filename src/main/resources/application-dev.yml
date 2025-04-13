@@ -3,7 +3,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/Uguimar-Platform/config-dev
+          uri: https://github.com/Yobel-SCM-2/config-dev
           clone-on-start: true
           default-label: main
           timeout: 10
@@ -12,4 +12,4 @@ logging:
   level:
     org.springframework.cloud: DEBUG
     org.springframework.boot: DEBUG
-    com.uguimar: DEBUG
+    com.yobel: DEBUG
